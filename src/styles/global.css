@@ -20,6 +20,7 @@
   --accent: #ffa552;
   --on-accent: #0d2b4e;
   --tint: #2a64a8;
+  --tint-blend: multiply;
   --grid-major: 0.1;
   --grid-minor: 0.04;
   --l-strong: 0.55;
@@ -43,7 +44,8 @@
     --plate: rgba(243, 239, 228, 0.96);
     --accent: #c2410c;
     --on-accent: #ffffff;
-    --tint: #3a74b8;
+    --tint: #14284a;
+    --tint-blend: color;
     --grid-major: 0.09;
     --grid-minor: 0.035;
     --l-strong: 0.6;
@@ -64,7 +66,8 @@
   --plate: rgba(243, 239, 228, 0.96);
   --accent: #c2410c;
   --on-accent: #ffffff;
-  --tint: #3a74b8;
+  --tint: #14284a;
+  --tint-blend: color;
   --grid-major: 0.09;
   --grid-minor: 0.035;
   --l-strong: 0.6;

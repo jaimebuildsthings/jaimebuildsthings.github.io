@@ -233,7 +233,8 @@ const spec = [
     position: absolute;
     inset: 0;
     background: var(--tint);
-    mix-blend-mode: multiply;
+    /* blueprint: multiply to a blue sheet; whiteprint: recolor dark lines ink-blue on pale paper */
+    mix-blend-mode: var(--tint-blend);
     opacity: 0;
   }
   .reg {
