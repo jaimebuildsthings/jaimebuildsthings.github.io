@@ -1,0 +1,412 @@
+---
+import Base from '../layouts/Base.astro';
+import ExplodedView from '../components/ExplodedView.astro';
+import LogTable from '../components/LogTable.astro';
+import { SITE } from '../site.config';
+import { projects } from '../data/projects';
+import { getPosts } from '../lib/posts';
+
+const latest = (await getPosts()).slice(0, 4);
+
+// Spec sheet rows
+const spec = [
+  ['Role', 'Software engineer, frontend'],
+  ['Currently', 'Senior Software Engineer II @ Bestow'],
+  ['Based in', 'Dallas, TX'],
+  ['Languages', 'TypeScript, JavaScript, HTML/CSS, Rust'],
+  ['Tooling', 'React, React Router (Remix), Next.js, Node, Vite, Astro, Playwright, Git, ESP32'],
+  ['Off-hours', 'Mountain biking, DIY around the house, autocross'],
+];
+---
+
+<Base sheet="HOME">
+  <!-- Hero -->
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero-copy">
+      <div class="dim"><span>Dwg. no. JBT-001 · Software engineer</span></div>
+      <h1 id="hero-title">Jaime<br />builds<br /><span class="accent">things.</span></h1>
+      <p class="lede">Frontend engineer by day: TypeScript, React and the web. Off the clock I build open hardware and tools for grassroots motorsport, so the car gets measured instead of guessed.</p>
+      <div class="cta">
+        <a href="#work" class="btn btn-primary">See the builds →</a>
+        <a href="#contact" class="btn">Get in touch</a>
+      </div>
+    </div>
+    <div class="hero-fig">
+      <ExplodedView />
+    </div>
+  </section>
+
+  <!-- Selected builds -->
+  <section id="work" class="section" aria-labelledby="work-title">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow">Section 01</div>
+        <h2 id="work-title" class="section-title">Selected builds</h2>
+      </div>
+      <a href={SITE.github} class="text-link">All repos on GitHub ↗</a>
+    </div>
+    <div class="cards">
+      {
+        projects.map((p, i) => (
+          <article class="card">
+            <div class="card-strip label">
+              <span>PRJ-{String(i + 1).padStart(3, '0')}</span>
+              <span class="status">● {p.status}</span>
+            </div>
+            {p.image && (
+              <div class="card-media">
+                <img src={p.image} alt={p.imageAlt ?? ''} loading="lazy" />
+              </div>
+            )}
+            <div class="card-body">
+              <h3>{p.name}</h3>
+              <p>{p.summary}</p>
+              <ul class="tags" aria-label="Stack">
+                {p.tags.map((t) => (
+                  <li>{t}</li>
+                ))}
+              </ul>
+              {(p.notes || p.source || p.live) && (
+                <div class="card-links">
+                  {p.notes && (
+                    <a href={p.notes} class="accent">
+                      Build notes →
+                    </a>
+                  )}
+                  {p.live && <a href={p.live}>Visit site ↗</a>}
+                  {p.source && <a href={p.source}>Source ↗</a>}
+                </div>
+              )}
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- Spec sheet -->
+  <section id="spec" class="section spec" aria-labelledby="spec-title">
+    <div class="spec-copy">
+      <div class="eyebrow">Section 02</div>
+      <h2 id="spec-title" class="section-title">Spec sheet</h2>
+      <p>I’m a senior engineer at Bestow in Dallas, where I work on the frontend in TypeScript and React. Outside work I race autocross, ride mountain bikes and fix things around the house. The racing is where the side projects come from: a setup tool for the web, then the hardware to feed it real numbers.</p>
+    </div>
+    <table class="bom">
+      <caption class="label">Bill of materials — {SITE.author}</caption>
+      <tbody>
+        {
+          spec.map(([k, v]) => (
+            <tr>
+              <th scope="row">{k}</th>
+              <td>{v}</td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Revision log -->
+  <section id="log" class="section" aria-labelledby="log-title">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow">Section 03</div>
+        <h2 id="log-title" class="section-title">Revision log</h2>
+      </div>
+      <a href="/log/" class="text-link">Full log →</a>
+    </div>
+    <LogTable posts={latest} />
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" class="contact" aria-labelledby="contact-title">
+    <div class="eyebrow">Section 04</div>
+    <h2 id="contact-title">Let’s build<br />something.</h2>
+    <div class="contact-links">
+      <a href={`mailto:${SITE.email}`} class="email">{SITE.email}</a>
+      <a href={SITE.github}>{SITE.githubLabel} ↗</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .accent {
+    color: var(--accent);
+  }
+
+  /* hero */
+  .hero {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: 24px;
+    align-items: center;
+    padding: clamp(40px, 6vw, 72px) var(--gutter) clamp(56px, 7vw, 88px);
+    border-bottom: 1px solid rgba(var(--line), var(--l-mid));
+  }
+  .hero-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    min-width: 0;
+  }
+  h1 {
+    margin: 0;
+    font-family: var(--display);
+    font-weight: 900;
+    font-size: clamp(92px, 13vw, 188px);
+    line-height: 0.84;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+  }
+  .lede {
+    margin: 0;
+    max-width: 600px;
+    font-size: clamp(18px, 1.6vw, 21px);
+    line-height: 1.5;
+  }
+  .cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  /* section heads */
+  .section-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 48px;
+  }
+
+  /* project cards */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 32px;
+  }
+  .card {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(var(--line), var(--l-strong));
+    background: var(--card);
+  }
+  .card-strip {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(var(--line), var(--l-mid));
+  }
+  .status {
+    color: var(--accent);
+  }
+  .card-media {
+    aspect-ratio: 16 / 10;
+    margin: 16px;
+    border: 1px solid rgba(var(--line), var(--l-mid));
+    overflow: hidden;
+  }
+  .card-media img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .card-strip + .card-body {
+    padding-top: 24px;
+  }
+  .card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    flex-grow: 1;
+    padding: 8px 24px 24px;
+  }
+  .card-body h3 {
+    margin: 0;
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: 36px;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+  .card-body p {
+    margin: 0;
+    font-size: 16px;
+    color: var(--soft);
+  }
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-family: var(--mono);
+    font-size: 12px;
+  }
+  .tags li {
+    padding: 4px 8px;
+    border: 1px solid rgba(var(--line), var(--l-mid));
+  }
+  .card-links {
+    display: flex;
+    gap: 24px;
+    margin-top: auto;
+    padding-top: 4px;
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .card-links a {
+    padding: 12px 0;
+  }
+
+  /* spec sheet */
+  .spec {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    gap: 24px 8%;
+    align-items: start;
+  }
+  .spec-copy p {
+    margin: 24px 0 0;
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--soft);
+  }
+  .bom {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid rgba(var(--line), var(--l-strong));
+    font-size: 16px;
+  }
+  .bom caption {
+    caption-side: top;
+    text-align: left;
+    padding-bottom: 12px;
+  }
+  .bom tr + tr {
+    border-top: 1px solid rgba(var(--line), 0.3);
+  }
+  .bom th {
+    width: 180px;
+    padding: 18px 20px;
+    text-align: left;
+    vertical-align: top;
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border-right: 1px solid rgba(var(--line), 0.3);
+  }
+  .bom td {
+    padding: 16px 20px;
+  }
+
+  /* contact */
+  .contact {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    padding: clamp(64px, 8vw, 96px) var(--gutter);
+  }
+  .contact h2 {
+    margin: 0;
+    font-family: var(--display);
+    font-weight: 900;
+    font-size: clamp(60px, 10vw, 148px);
+    line-height: 0.86;
+    text-transform: uppercase;
+  }
+  .contact-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 48px;
+    font-family: var(--mono);
+    font-size: clamp(15px, 1.5vw, 20px);
+  }
+  .contact-links a {
+    padding: 10px 0;
+    overflow-wrap: anywhere;
+  }
+  .email {
+    border-bottom: 2px solid var(--accent);
+  }
+  .email:hover {
+    text-decoration: none;
+    color: var(--accent);
+  }
+
+  /* responsive */
+  @media (max-width: 1100px) {
+    .cards {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    /* an odd card out spans the row, with media and text side by side */
+    .card:last-child:nth-child(odd) {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      align-content: start;
+    }
+    .card:last-child:nth-child(odd) .card-strip {
+      grid-column: 1 / -1;
+    }
+    .card:last-child:nth-child(odd) .card-body {
+      padding-top: 16px;
+    }
+  }
+  @media (max-width: 960px) {
+    .hero {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .hero-fig {
+      max-width: 440px;
+      width: 100%;
+      justify-self: center;
+    }
+    .spec {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+  @media (max-width: 760px) {
+    .cards {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 28px;
+    }
+    .section-head {
+      flex-direction: column;
+      align-items: flex-start;
+      margin-bottom: 28px;
+    }
+    .hero-copy {
+      gap: 24px;
+    }
+    .cta {
+      flex-direction: column;
+    }
+    .cta .btn {
+      width: 100%;
+    }
+    .bom th {
+      width: 110px;
+      padding: 14px;
+      font-size: 11px;
+    }
+    .bom td {
+      padding: 14px;
+      font-size: 15px;
+    }
+    .card-body h3 {
+      font-size: 32px;
+    }
+    .contact-links {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>

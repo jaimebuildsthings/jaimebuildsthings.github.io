@@ -1,0 +1,35 @@
+---
+import { isoDate, type Post } from '../lib/posts';
+
+interface Props {
+  posts: Post[];
+  showDescription?: boolean;
+}
+const { posts, showDescription = false } = Astro.props;
+---
+
+<div class="log-table">
+  <div class="log-head label" aria-hidden="true">
+    <span>Rev</span><span>Date</span><span>Entry</span><span class="log-read">Read</span>
+  </div>
+  {
+    posts.length === 0 ? (
+      <p class="log-empty">No entries yet. Rev A is on the drawing board.</p>
+    ) : (
+      posts.map((post) => (
+        <a class="log-row" href={`/log/${post.id}/`}>
+          <span class="log-rev">{post.rev}</span>
+          <time class="log-date" datetime={post.data.date.toISOString()}>
+            {isoDate(post.data.date)}
+          </time>
+          <span class="log-title">
+            {post.data.title}
+            {post.data.draft && <span class="label"> [draft]</span>}
+            {showDescription && <span class="log-desc">{post.data.description}</span>}
+          </span>
+          <span class="log-read">{post.minutes} min →</span>
+        </a>
+      ))
+    )
+  }
+</div>

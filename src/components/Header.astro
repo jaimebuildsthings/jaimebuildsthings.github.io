@@ -1,0 +1,184 @@
+---
+import { NAV, SITE } from '../site.config';
+import Logo from './Logo.astro';
+import ThemeToggle from './ThemeToggle.astro';
+
+const path = Astro.url.pathname;
+const isCurrent = (href: string) => href === '/log/' && path.startsWith('/log');
+---
+
+<header class="site-header">
+  <a href="/" class="brand" aria-label={`${SITE.name} — home`}>
+    <Logo size={36} />
+    <span class="brand-name">jaimebuildsthings<span class="tld">.dev</span></span>
+  </a>
+
+  <nav aria-label="Primary" class="nav-desktop">
+    {
+      NAV.map((item) => (
+        <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+          <span class="num">{item.num}</span> {item.label}
+        </a>
+      ))
+    }
+    <a href={SITE.github} class="btn btn-outline-accent gh">GitHub ↗</a>
+    <ThemeToggle />
+  </nav>
+
+  <div class="nav-mobile">
+    <ThemeToggle />
+    <details class="menu">
+      <summary aria-label="Menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <path d="M3 7h18M3 12h18M3 17h12"></path>
+        </svg>
+      </summary>
+      <nav aria-label="Primary" class="menu-panel">
+        {
+          NAV.map((item) => (
+            <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+              <span class="num">{item.num}</span>
+              {item.label}
+            </a>
+          ))
+        }
+        <a href={SITE.github}><span class="num">↗</span>GitHub</a>
+      </nav>
+    </details>
+  </div>
+</header>
+
+<script>
+  // Close the mobile menu after picking an in-page link.
+  document.querySelectorAll<HTMLAnchorElement>('.menu-panel a').forEach((a) =>
+    a.addEventListener('click', () => a.closest('details')?.removeAttribute('open')),
+  );
+</script>
+
+<style>
+  .site-header {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    min-height: 88px;
+    padding: 0 var(--gutter);
+    border-bottom: 1px solid rgba(var(--line), var(--l-mid));
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-family: var(--mono);
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+  }
+  .brand:hover {
+    text-decoration: none;
+  }
+  .tld {
+    color: var(--accent);
+  }
+  .nav-desktop {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .nav-desktop > a:not(.btn) {
+    padding: 14px 14px;
+  }
+  .nav-desktop a[aria-current='page'],
+  .menu-panel a[aria-current='page'] {
+    color: var(--accent);
+  }
+  .num {
+    color: var(--muted);
+  }
+  .gh {
+    margin-left: 12px;
+    min-height: 44px;
+    padding: 0 18px;
+    font-size: 13px;
+  }
+  .nav-mobile {
+    display: none;
+    align-items: center;
+    gap: 4px;
+  }
+  .menu summary {
+    list-style: none;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  .menu summary::-webkit-details-marker {
+    display: none;
+  }
+  .menu[open] summary {
+    color: var(--accent);
+  }
+  .menu-panel {
+    position: absolute;
+    z-index: 5;
+    left: -1px;
+    right: -1px;
+    top: 100%;
+    display: flex;
+    flex-direction: column;
+    background: var(--ground);
+    border: 1px solid rgba(var(--line), var(--l-strong));
+    border-top: 0;
+    font-family: var(--mono);
+    font-size: 14px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .menu-panel a {
+    display: flex;
+    gap: 14px;
+    padding: 16px var(--gutter);
+    border-top: 1px solid rgba(var(--line), var(--l-soft));
+  }
+  @media (max-width: 960px) {
+    .nav-desktop {
+      display: none;
+    }
+    .nav-mobile {
+      display: flex;
+    }
+    .site-header {
+      min-height: 64px;
+      padding-right: 8px;
+    }
+    .brand {
+      font-size: 13px;
+      gap: 10px;
+    }
+    .brand :global(svg) {
+      width: 26px;
+      height: 26px;
+    }
+  }
+  /* very small phones (e.g. iPhone SE 1st gen, 320px): drop the mark so the name fits */
+  @media (max-width: 360px) {
+    .brand :global(svg) {
+      display: none;
+    }
+    .brand {
+      font-size: 12px;
+      letter-spacing: 0;
+    }
+    .site-header {
+      padding-right: 4px;
+    }
+  }
+</style>

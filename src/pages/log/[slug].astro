@@ -1,0 +1,297 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { getPosts, isoDate, type Post } from '../../lib/posts';
+import { SITE } from '../../site.config';
+
+export async function getStaticPaths() {
+  const posts = await getPosts(); // newest first
+  return posts.map((post, i) => ({
+    params: { slug: post.id },
+    props: { post, newer: posts[i - 1], older: posts[i + 1] },
+  }));
+}
+
+interface Props {
+  post: Post;
+  newer?: Post;
+  older?: Post;
+}
+
+const { post, newer, older } = Astro.props;
+const { Content, headings } = await render(post);
+const toc = headings.filter((h) => h.depth === 2);
+---
+
+<Base title={post.data.title} description={post.data.description} sheet={`LOG-${post.num}`} type="article">
+  <article class="post">
+    <header class="post-head">
+      <a href="/log/" class="back label">← Revision log</a>
+      <dl class="meta">
+        <div><dt class="label">Dwg. no.</dt><dd>LOG-{post.num}</dd></div>
+        <div><dt class="label">Rev</dt><dd class="accent">{post.rev}</dd></div>
+        <div>
+          <dt class="label">Date</dt>
+          <dd><time datetime={post.data.date.toISOString()}>{isoDate(post.data.date)}</time></dd>
+        </div>
+        {
+          post.data.updated && (
+            <div>
+              <dt class="label">Updated</dt>
+              <dd><time datetime={post.data.updated.toISOString()}>{isoDate(post.data.updated)}</time></dd>
+            </div>
+          )
+        }
+        <div><dt class="label">Read</dt><dd>{post.minutes} min</dd></div>
+      </dl>
+      <h1>{post.data.title}</h1>
+      <p class="desc">{post.data.description}</p>
+      {
+        post.data.tags.length > 0 && (
+          <ul class="tags" aria-label="Tags">
+            {post.data.tags.map((t) => (
+              <li>{t}</li>
+            ))}
+          </ul>
+        )
+      }
+    </header>
+
+    <div class="post-grid">
+      {
+        toc.length > 1 && (
+          <nav class="toc" aria-label="Sections">
+            <div class="label">Sections</div>
+            <ol>
+              {toc.map((h, i) => (
+                <li>
+                  <a href={`#${h.slug}`}>
+                    <span class="toc-num">§ {i + 1}</span> {h.text}
+                  </a>
+                </li>
+              ))}
+            </ol>
+          </nav>
+        )
+      }
+      <div class="prose">
+        <Content />
+      </div>
+    </div>
+
+    <footer class="post-foot">
+      <div class="sign label">— Drawn by {SITE.author}. Questions or corrections? <a href={`mailto:${SITE.email}`}>Email me</a>.</div>
+      <nav class="pager" aria-label="More entries">
+        {
+          older ? (
+            <a href={`/log/${older.id}/`} class="pager-link">
+              <span class="label">← Rev {older.rev}</span>
+              <span class="pager-title">{older.data.title}</span>
+            </a>
+          ) : (
+            <span />
+          )
+        }
+        {
+          newer && (
+            <a href={`/log/${newer.id}/`} class="pager-link next">
+              <span class="label">Rev {newer.rev} →</span>
+              <span class="pager-title">{newer.data.title}</span>
+            </a>
+          )
+        }
+      </nav>
+    </footer>
+  </article>
+</Base>
+
+<style>
+  .post {
+    padding: clamp(40px, 6vw, 72px) var(--gutter) clamp(56px, 7vw, 88px);
+  }
+  .accent {
+    color: var(--accent);
+  }
+  .post-head {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding-bottom: 40px;
+    margin-bottom: 48px;
+    border-bottom: 1px solid rgba(var(--line), var(--l-mid));
+  }
+  .back {
+    align-self: flex-start;
+    padding: 10px 0;
+  }
+  .back:hover {
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0;
+    border: 1px solid rgba(var(--line), var(--l-strong));
+    align-self: flex-start;
+    font-family: var(--mono);
+    font-size: 14px;
+  }
+  .meta > div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 10px 18px;
+    border-right: 1px solid rgba(var(--line), var(--l-mid));
+  }
+  .meta > div:last-child {
+    border-right: 0;
+  }
+  .meta dt {
+    font-size: 10px;
+  }
+  .meta dd {
+    margin: 0;
+  }
+  h1 {
+    margin: 0;
+    max-width: 22ch;
+    font-family: var(--display);
+    font-weight: 900;
+    font-size: clamp(52px, 7.5vw, 112px);
+    line-height: 0.9;
+    text-transform: uppercase;
+    overflow-wrap: break-word;
+  }
+  .desc {
+    margin: 0;
+    max-width: 60ch;
+    font-size: clamp(18px, 1.6vw, 21px);
+    color: var(--soft);
+  }
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-family: var(--mono);
+    font-size: 12px;
+  }
+  .tags li {
+    padding: 4px 8px;
+    border: 1px solid rgba(var(--line), var(--l-mid));
+  }
+
+  .post-grid {
+    display: grid;
+    grid-template-columns: 220px minmax(0, 1fr);
+    gap: 56px;
+    align-items: start;
+  }
+  .post-grid:not(:has(.toc)) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .post-grid:not(:has(.toc)) .prose {
+    margin: 0 auto;
+  }
+  .toc {
+    position: sticky;
+    top: 24px;
+    font-size: 14px;
+  }
+  .toc ol {
+    margin: 12px 0 0;
+    padding: 0;
+    list-style: none;
+    border-left: 1px solid rgba(var(--line), var(--l-mid));
+  }
+  .toc a {
+    display: block;
+    padding: 6px 0 6px 14px;
+    color: var(--soft);
+    line-height: 1.35;
+  }
+  .toc a:hover {
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .toc-num {
+    display: block;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+  }
+  .prose :global(h2) {
+    scroll-margin-top: 24px;
+  }
+
+  .post-foot {
+    margin-top: 72px;
+    padding-top: 28px;
+    border-top: 1px solid rgba(var(--line), var(--l-mid));
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+  .sign {
+    text-transform: none;
+    letter-spacing: 0.04em;
+  }
+  .sign a {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .pager {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+  }
+  .pager-link {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 20px 22px;
+    border: 1px solid rgba(var(--line), var(--l-strong));
+    background: var(--card);
+  }
+  .pager-link:hover {
+    text-decoration: none;
+    border-color: var(--accent);
+  }
+  .pager-link.next {
+    text-align: right;
+    grid-column: 2;
+  }
+  .pager-title {
+    font-size: 18px;
+    font-weight: 500;
+  }
+
+  @media (max-width: 960px) {
+    .post-grid {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 32px;
+    }
+    .toc {
+      position: static;
+    }
+  }
+  @media (max-width: 600px) {
+    .meta > div {
+      padding: 8px 12px;
+    }
+    .pager {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .pager-link.next {
+      grid-column: 1;
+    }
+    .prose {
+      font-size: 17px;
+    }
+  }
+</style>

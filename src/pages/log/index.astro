@@ -1,0 +1,50 @@
+---
+import Base from '../../layouts/Base.astro';
+import LogTable from '../../components/LogTable.astro';
+import { getPosts } from '../../lib/posts';
+
+const posts = await getPosts();
+---
+
+<Base title="Revision log" description="Notes, write-ups and lessons from building things." sheet="LOG">
+  <section class="section log-page" aria-labelledby="log-title">
+    <div class="head">
+      <div>
+        <div class="eyebrow">Section 03 · {posts.length} {posts.length === 1 ? 'entry' : 'entries'}</div>
+        <h1 id="log-title" class="section-title">Revision log</h1>
+        <p class="intro">Notes from building things — what worked, what broke, and what changed between revisions.</p>
+      </div>
+      <a href="/rss.xml" class="text-link">Subscribe via RSS ↗</a>
+    </div>
+    <LogTable posts={posts} showDescription />
+  </section>
+</Base>
+
+<style>
+  .log-page {
+    border-bottom: 0;
+  }
+  .head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 48px;
+  }
+  h1.section-title {
+    font-size: clamp(64px, 10vw, 120px);
+  }
+  .intro {
+    margin: 20px 0 0;
+    max-width: 560px;
+    font-size: 18px;
+    color: var(--soft);
+  }
+  @media (max-width: 760px) {
+    .head {
+      flex-direction: column;
+      align-items: flex-start;
+      margin-bottom: 28px;
+    }
+  }
+</style>

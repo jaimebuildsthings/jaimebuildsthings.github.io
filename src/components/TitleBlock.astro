@@ -1,0 +1,72 @@
+---
+import { SITE } from '../site.config';
+import { getPosts } from '../lib/posts';
+
+interface Props {
+  sheet: string;
+}
+const { sheet } = Astro.props;
+const posts = await getPosts();
+const rev = posts[0]?.rev ?? '—';
+const year = new Date().getFullYear();
+---
+
+<footer class="title-block">
+  <div class="cell wide"><span class="label">Project</span><span>{SITE.name}</span></div>
+  <div class="cell"><span class="label">Drawn by</span><span>{SITE.author}</span></div>
+  <div class="cell"><span class="label">Sheet</span><span>{sheet}</span></div>
+  <div class="cell"><span class="label">Rev</span><span class="rev">{rev}</span></div>
+  <div class="cell"><span class="label">Feed</span><a href="/rss.xml">RSS ↗</a></div>
+  <div class="cell"><span class="label">©</span><span>{year}</span></div>
+</footer>
+
+<style>
+  .title-block {
+    display: grid;
+    grid-template-columns: 2fr repeat(5, minmax(0, 1fr));
+    border-top: 1.5px solid rgba(var(--line), var(--l-strong));
+    font-family: var(--mono);
+    font-size: 15px;
+  }
+  .cell {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 16px 24px;
+    border-right: 1px solid rgba(var(--line), var(--l-mid));
+    min-width: 0;
+  }
+  .cell:last-child {
+    border-right: 0;
+  }
+  .cell .label {
+    font-size: 11px;
+  }
+  .rev {
+    color: var(--accent);
+  }
+  @media (max-width: 960px) {
+    .title-block {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      font-size: 13px;
+    }
+    .cell {
+      padding: 12px 16px;
+      border-bottom: 1px solid rgba(var(--line), var(--l-mid));
+    }
+    .cell.wide {
+      grid-column: span 2;
+      border-right: 0;
+    }
+    .cell:nth-child(odd):not(.wide) {
+      border-right: 0;
+    }
+    .cell:last-child {
+      grid-column: span 2;
+      border-bottom: 0;
+    }
+    .cell .label {
+      font-size: 10px;
+    }
+  }
+</style>

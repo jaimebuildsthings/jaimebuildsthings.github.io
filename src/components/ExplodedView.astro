@@ -1,0 +1,175 @@
+---
+// FIG. 1 — exploded view of a typical build: five stacked plates with an iterate loop.
+const plates = [
+  { cy: 90, label: '01 · IDEA' },
+  { cy: 225, label: '02 · EXPERIMENT' },
+  { cy: 360, label: '03 · CODE' },
+  { cy: 495, label: '04 · TEST' },
+  { cy: 630, label: '05 · SHIP', accent: true },
+];
+const pts = (arr: number[][]) => arr.map((p) => p.join(',')).join(' ');
+---
+
+<figure class="exploded">
+  <svg viewBox="0 0 560 720" fill="none" role="img" aria-labelledby="fig1-title">
+    <title id="fig1-title">Exploded view of a build: idea, experiment, code, test, ship, then iterate back to idea</title>
+    <line class="axis" x1="280" y1="16" x2="280" y2="704"></line>
+    <path class="assembly" d="M180 102 V225 M380 102 V225 M180 237 V360 M380 237 V360 M180 372 V495 M380 372 V495 M180 507 V630 M380 507 V630"></path>
+
+    {
+      plates.map(({ cy, accent }) => (
+        <g class={accent ? 'plate is-accent' : 'plate'}>
+          <polygon class="side-l" points={pts([[180, cy], [280, cy + 50], [280, cy + 62], [180, cy + 12]])} />
+          <polygon class="side-r" points={pts([[280, cy + 50], [380, cy], [380, cy + 12], [280, cy + 62]])} />
+          <polygon class="top" points={pts([[280, cy - 50], [380, cy], [280, cy + 50], [180, cy]])} />
+        </g>
+      ))
+    }
+
+    <!-- plate glyphs -->
+    <g class="glyph">
+      <ellipse cx="280" cy="90" rx="30" ry="15"></ellipse>
+      <ellipse class="fill" cx="280" cy="90" rx="10" ry="5"></ellipse>
+
+      <polyline class="dashed" points="240,229 260,217 282,231 306,215"></polyline>
+      <circle class="fill" cx="240" cy="229" r="3.5"></circle>
+      <circle class="fill" cx="260" cy="217" r="3.5"></circle>
+      <circle class="fill" cx="282" cy="231" r="3.5"></circle>
+      <circle class="fill" cx="306" cy="215" r="3.5"></circle>
+
+      <path class="thick" d="M236 354 L268 370 M254 344 L306 370 M272 336 L310 355 M244 368 L266 379"></path>
+
+      <ellipse cx="280" cy="495" rx="28" ry="14"></ellipse>
+      <ellipse cx="280" cy="495" rx="12" ry="6"></ellipse>
+      <path d="M240 495 H252 M308 495 H320 M280 475 V481 M280 509 V515"></path>
+    </g>
+    <polyline class="check" points="252,628 272,639 314,615"></polyline>
+
+    <!-- iterate loop -->
+    <path class="loop" d="M172 642 C 40 642, 40 90, 170 90"></path>
+    <polyline class="loop-head" points="158,83 170,90 158,97"></polyline>
+    <text class="callout" x="96" y="366" text-anchor="middle" letter-spacing="3" transform="rotate(-90 96 366)">ITERATE</text>
+
+    <!-- callouts -->
+    {
+      plates.map(({ cy, label }) => (
+        <g>
+          <polyline class="leader" points={pts([[380, cy], [420, cy - 28], [552, cy - 28]])} />
+          <circle class="node" cx="380" cy={cy} r="3" />
+          <text class="callout" x="552" y={cy - 36} text-anchor="end" letter-spacing="1.5">
+            {label}
+          </text>
+        </g>
+      ))
+    }
+  </svg>
+  <figcaption class="label">Fig. 1 — Exploded view, typical build</figcaption>
+</figure>
+
+<style>
+  .exploded {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  svg {
+    width: 100%;
+    max-width: 520px;
+    height: auto;
+  }
+  figcaption {
+    text-align: center;
+  }
+  .axis {
+    stroke: var(--muted);
+    stroke-dasharray: 14 4 2 4;
+  }
+  .assembly {
+    stroke: var(--muted);
+    stroke-dasharray: 4 5;
+  }
+  .plate polygon {
+    stroke: var(--ink);
+    stroke-width: 1.5;
+    stroke-linejoin: round;
+  }
+  .plate .side-l {
+    fill: rgba(var(--line), 0.14);
+  }
+  .plate .side-r {
+    fill: rgba(var(--line), 0.22);
+  }
+  .plate .top {
+    fill: var(--plate);
+  }
+  .plate.is-accent polygon {
+    stroke: var(--accent);
+  }
+  .plate.is-accent .top {
+    stroke-width: 2;
+  }
+  .glyph * {
+    stroke: var(--ink);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+  }
+  .glyph .fill {
+    fill: var(--ink);
+    stroke: none;
+  }
+  .glyph .dashed {
+    stroke-dasharray: 3 3;
+  }
+  .glyph .thick {
+    stroke-width: 2;
+  }
+  .check {
+    stroke: var(--accent);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .loop {
+    stroke: var(--accent);
+    stroke-width: 1.5;
+    stroke-dasharray: 6 5;
+  }
+  .loop-head {
+    stroke: var(--accent);
+    stroke-width: 1.5;
+    stroke-linejoin: round;
+  }
+  .leader {
+    stroke: var(--ink);
+  }
+  .node {
+    fill: var(--ink);
+  }
+  .callout {
+    fill: var(--accent);
+    font-family: var(--mono);
+    font-size: 13px;
+  }
+  /* small screens: thicker strokes and bigger labels, since the SVG shrinks */
+  @media (max-width: 600px) {
+    .plate polygon,
+    .glyph * {
+      stroke-width: 2;
+    }
+    .glyph .thick {
+      stroke-width: 3;
+    }
+    .loop,
+    .leader {
+      stroke-width: 2;
+    }
+    .callout {
+      font-size: 20px;
+    }
+    .callout[letter-spacing='1.5'] {
+      letter-spacing: 0;
+    }
+  }
+</style>

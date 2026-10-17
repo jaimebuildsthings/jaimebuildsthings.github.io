@@ -1,0 +1,43 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="Not found" sheet="404">
+  <section class="nf">
+    <div class="dim"><span>Error · Part not found</span></div>
+    <h1>404</h1>
+    <p>This part isn’t in the bill of materials. It may have been renamed in a later revision.</p>
+    <div class="cta">
+      <a href="/" class="btn btn-primary">Back to the drawing →</a>
+      <a href="/log/" class="btn">Revision log</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .nf {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    max-width: 760px;
+    padding: clamp(56px, 8vw, 120px) var(--gutter);
+  }
+  h1 {
+    margin: 0;
+    font-family: var(--display);
+    font-weight: 900;
+    font-size: clamp(120px, 22vw, 280px);
+    line-height: 0.82;
+    color: var(--accent);
+  }
+  p {
+    margin: 0;
+    font-size: 20px;
+    color: var(--soft);
+  }
+  .cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+</style>

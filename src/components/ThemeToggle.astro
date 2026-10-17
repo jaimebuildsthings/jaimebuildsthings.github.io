@@ -1,0 +1,69 @@
+---
+// Switches between blueprint (dark) and whiteprint (light).
+// With no saved choice, the site follows the OS setting.
+---
+
+<button type="button" class="theme-toggle" aria-label="Switch to light theme" title="Switch theme">
+  <svg class="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+    <circle cx="12" cy="12" r="4"></circle>
+    <path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+  </svg>
+  <svg class="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+    <path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"></path>
+  </svg>
+</button>
+
+<script>
+  const root = document.documentElement;
+  const media = window.matchMedia('(prefers-color-scheme: light)');
+  const current = () => (root.dataset.theme as 'light' | 'dark' | undefined) ?? (media.matches ? 'light' : 'dark');
+
+  function sync() {
+    const next = current() === 'dark' ? 'light' : 'dark';
+    document.querySelectorAll<HTMLButtonElement>('.theme-toggle').forEach((b) => {
+      b.setAttribute('aria-label', `Switch to ${next} theme`);
+      b.dataset.mode = current();
+    });
+  }
+
+  document.querySelectorAll<HTMLButtonElement>('.theme-toggle').forEach((b) =>
+    b.addEventListener('click', () => {
+      const next = current() === 'dark' ? 'light' : 'dark';
+      root.dataset.theme = next;
+      try {
+        localStorage.setItem('theme', next);
+      } catch {}
+      sync();
+    }),
+  );
+  media.addEventListener('change', sync);
+  sync();
+</script>
+
+<style>
+  .theme-toggle {
+    width: 48px;
+    height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .theme-toggle:hover {
+    color: var(--accent);
+  }
+  /* Show the icon for the theme you'd switch TO. */
+  .icon-moon {
+    display: none;
+  }
+  .theme-toggle[data-mode='light'] .icon-sun {
+    display: none;
+  }
+  .theme-toggle[data-mode='light'] .icon-moon {
+    display: block;
+  }
+</style>

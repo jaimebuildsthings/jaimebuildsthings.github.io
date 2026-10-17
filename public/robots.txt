@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://jaimebuildsthings.dev/sitemap-index.xml
