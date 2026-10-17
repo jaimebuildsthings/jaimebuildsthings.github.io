@@ -10,11 +10,11 @@ const latest = (await getPosts()).slice(0, 4);
 
 // Spec sheet rows
 const spec = [
-  ['Role', 'Software engineer, frontend'],
+  ['Role', 'Full-stack engineer, frontend focus'],
   ['Currently', 'Senior Software Engineer II @ Bestow'],
   ['Based in', 'Dallas, TX'],
-  ['Languages', 'TypeScript, JavaScript, HTML/CSS, Rust'],
-  ['Tooling', 'React, React Router (Remix), Next.js, Node, Vite, Astro, Playwright, Git, ESP32'],
+  ['Languages', 'TypeScript, JavaScript, HTML/CSS, SQL, Python, Go, Rust'],
+  ['Tooling', 'React, React Router (Remix), Next.js, Node, Postgres, Supabase, Vite, Playwright, Claude Code, ESP32'],
   ['Off-hours', 'Mountain biking, DIY around the house, autocross'],
 ];
 ---
@@ -23,12 +23,12 @@ const spec = [
   <!-- Hero -->
   <section class="hero" aria-labelledby="hero-title">
     <div class="hero-copy">
-      <div class="dim"><span>Dwg. no. JBT-001 · Software engineer</span></div>
+      <div class="dim"><span>Dwg. no. JBT-001 · Full-stack engineer</span></div>
       <h1 id="hero-title">Jaime<br />builds<br /><span class="accent">things.</span></h1>
-      <p class="lede">Frontend engineer by day: TypeScript, React and the web. Off the clock I build open hardware and tools for grassroots motorsport.</p>
+      <p class="lede">Full-stack engineer with a frontend focus, mostly TypeScript and React. Outside of work I build open hardware and tools for grassroots motorsport.</p>
       <div class="cta">
-        <a href="#work" class="btn btn-primary">See the builds →</a>
-        <a href="#contact" class="btn">Get in touch</a>
+        <a href="#work" class="btn btn-primary">Projects →</a>
+        <a href="#contact" class="btn">Contact</a>
       </div>
     </div>
     <div class="hero-fig">
@@ -41,7 +41,7 @@ const spec = [
     <div class="section-head">
       <div>
         <div class="eyebrow">Section 01</div>
-        <h2 id="work-title" class="section-title">Selected builds</h2>
+        <h2 id="work-title" class="section-title">Projects</h2>
       </div>
       <a href={SITE.github} class="text-link">All repos on GitHub ↗</a>
     </div>
@@ -89,7 +89,7 @@ const spec = [
     <div class="spec-copy">
       <div class="eyebrow">Section 02</div>
       <h2 id="spec-title" class="section-title">Spec sheet</h2>
-      <p>I’m a senior engineer at Bestow in Dallas, where I work on the frontend in TypeScript and React. Outside work I race autocross, ride mountain bikes and fix things around the house. The racing is where the side projects come from: a setup tool for the web, then the hardware to feed it real numbers.</p>
+      <p>I’m a senior engineer at Bestow in Dallas. I work across the stack, mostly on the frontend, in TypeScript and React. Outside of work I race autocross, ride mountain bikes and fix things around the house. My side projects are tools for working on my own car.</p>
     </div>
     <table class="bom">
       <caption class="label">Bill of materials — {SITE.author}</caption>
@@ -121,7 +121,7 @@ const spec = [
   <!-- Contact -->
   <section id="contact" class="contact" aria-labelledby="contact-title">
     <div class="eyebrow">Section 04</div>
-    <h2 id="contact-title">Let’s build<br />something.</h2>
+    <h2 id="contact-title">Contact</h2>
     <div class="contact-links">
       <a href={`mailto:${SITE.email}`} class="email">{SITE.email}</a>
       <a href={SITE.github}>{SITE.githubLabel} ↗</a>

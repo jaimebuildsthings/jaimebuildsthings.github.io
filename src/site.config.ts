@@ -3,7 +3,7 @@ export const SITE = {
   name: 'jaimebuildsthings.dev',
   author: 'Jaime',
   title: 'Jaime builds things',
-  description: 'Frontend engineer in Dallas. TypeScript and React by day, open hardware for grassroots motorsport after hours.',
+  description: 'Full-stack engineer in Dallas with a frontend focus. TypeScript and React by day, open hardware for grassroots motorsport after hours.',
   url: 'https://jaimebuildsthings.dev',
   github: 'https://github.com/jaimebuildsthings',
   githubLabel: 'github.com/jaimebuildsthings',
@@ -13,7 +13,7 @@ export const SITE = {
 };
 
 export const NAV = [
-  { label: 'Work', num: '01', href: '/#work' },
+  { label: 'Projects', num: '01', href: '/#work' },
   { label: 'About', num: '02', href: '/#spec' },
   { label: 'Log', num: '03', href: '/log/' },
   { label: 'Contact', num: '04', href: '/#contact' },

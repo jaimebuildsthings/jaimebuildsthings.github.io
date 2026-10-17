@@ -17,8 +17,8 @@ export const projects: Project[] = [
     name: 'Stringline',
     status: 'Live',
     summary:
-      'Free calculators and guides for setting up a car at home: string alignment, coilover travel and corner balance, plus a garage to keep your specs in.',
-    tags: ['TypeScript', 'React', 'Web'],
+      "Free calculators and guides for doing your own car setup: string alignment, coilover travel and corner balance. Save your car's specs in the garage.",
+    tags: ['TypeScript', 'React Router', 'Supabase', 'Cloudflare Workers'],
     live: 'https://stringline.ing',
     image: '/images/stringline.webp',
     imageAlt: 'Stringline homepage with a top-down car diagram showing toe, camber and cross-weight readouts',
@@ -27,7 +27,7 @@ export const projects: Project[] = [
     name: 'corner-scales',
     status: 'Prototype',
     summary:
-      'DIY wireless corner-weight scales. Each pad is its own instrument; pads share readings over ESP-NOW, so connecting to any one of them gives all four corners with no network.',
+      'DIY wireless corner-weight scales. The four pads share readings over ESP-NOW, so you connect to one and see all four corners. No Wi-Fi network needed.',
     tags: ['Rust', 'Embassy', 'ESP32-S3', 'ESP-NOW', 'OpenSCAD'],
     source: 'https://github.com/jaimebuildsthings/corner-scales',
     image: '/images/corner-scales.webp',
@@ -37,7 +37,7 @@ export const projects: Project[] = [
     name: 'pit-pyro',
     status: 'Design',
     summary:
-      'Handheld tire pyrometer. A thermal camera reads outer, middle and inner tread temps in one trigger pull and logs every reading on the device, so four tires take under a minute.',
+      'DIY handheld tire pyrometer. A thermal camera reads the outer, middle and inner tread temps in one trigger pull and saves every reading on the device.',
     tags: ['OpenSCAD', 'ESP32-S3', 'MLX90640', 'Rust'],
     source: 'https://github.com/jaimebuildsthings/pit-pyro',
     image: '/images/pit-pyro.webp',
