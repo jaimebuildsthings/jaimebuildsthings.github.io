@@ -28,8 +28,10 @@ export const projects: Project[] = [
     status: 'Prototype',
     summary:
       'DIY wireless corner-weight scales. Each pad is its own instrument; pads share readings over ESP-NOW, so connecting to any one of them gives all four corners with no network.',
-    tags: ['Rust', 'Embassy', 'ESP32-S3', 'ESP-NOW'],
+    tags: ['Rust', 'Embassy', 'ESP32-S3', 'ESP-NOW', 'OpenSCAD'],
     source: 'https://github.com/jaimebuildsthings/corner-scales',
+    image: '/images/corner-scales.webp',
+    imageAlt: 'Exploded render of a full-size pad: top plate, load cells, base plate and electronics box',
   },
   {
     name: 'pit-pyro',
