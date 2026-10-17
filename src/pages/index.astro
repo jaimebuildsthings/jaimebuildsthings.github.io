@@ -2,11 +2,13 @@
 import Base from '../layouts/Base.astro';
 import ExplodedView from '../components/ExplodedView.astro';
 import LogTable from '../components/LogTable.astro';
+import Dim from '../components/Dim.astro';
 import { SITE } from '../site.config';
 import { projects } from '../data/projects';
 import { getPosts } from '../lib/posts';
 
-const latest = (await getPosts()).slice(0, 4);
+const posts = await getPosts();
+const latest = posts.slice(0, 4);
 
 // Spec sheet rows
 const spec = [
@@ -42,6 +44,7 @@ const spec = [
       <div>
         <div class="eyebrow">Section 01</div>
         <h2 id="work-title" class="section-title">Projects</h2>
+        <Dim value={`${projects.length} items`} />
       </div>
       <a href={SITE.github} class="text-link">All repos on GitHub ↗</a>
     </div>
@@ -55,7 +58,14 @@ const spec = [
             </div>
             {p.image && (
               <div class="card-media">
-                <img src={p.image} alt={p.imageAlt ?? ''} loading="lazy" />
+                <div class="media-frame">
+                  <img src={p.image} alt={p.imageAlt ?? ''} loading="lazy" />
+                  <span class="tint" aria-hidden="true" />
+                </div>
+                <i class="reg tl" aria-hidden="true" />
+                <i class="reg tr" aria-hidden="true" />
+                <i class="reg bl" aria-hidden="true" />
+                <i class="reg br" aria-hidden="true" />
               </div>
             )}
             <div class="card-body">
@@ -89,6 +99,7 @@ const spec = [
     <div class="spec-copy">
       <div class="eyebrow">Section 02</div>
       <h2 id="spec-title" class="section-title">Spec sheet</h2>
+      <Dim value={`${spec.length} rows`} />
       <p>I’m a senior engineer at Bestow in Dallas. I work across the stack, mostly on the frontend, in TypeScript and React. Outside of work I race autocross, ride mountain bikes and fix things around the house. My side projects are tools for working on my own car.</p>
     </div>
     <table class="bom">
@@ -112,6 +123,7 @@ const spec = [
       <div>
         <div class="eyebrow">Section 03</div>
         <h2 id="log-title" class="section-title">Revision log</h2>
+        <Dim value={`${posts.length} ${posts.length === 1 ? 'entry' : 'entries'}`} />
       </div>
       <a href="/log/" class="text-link">Full log →</a>
     </div>
@@ -201,16 +213,100 @@ const spec = [
     color: var(--accent);
   }
   .card-media {
+    position: relative;
     aspect-ratio: 16 / 10;
     margin: 16px;
-    border: 1px solid rgba(var(--line), var(--l-mid));
+  }
+  .media-frame {
+    position: absolute;
+    inset: 0;
     overflow: hidden;
+    border: 1px solid rgba(var(--line), var(--l-mid));
   }
   .card-media img {
     display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+  .tint {
+    position: absolute;
+    inset: 0;
+    background: var(--tint);
+    mix-blend-mode: multiply;
+    opacity: 0;
+  }
+  .reg {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border: 0 solid var(--accent);
+    opacity: 0;
+  }
+  .reg.tl {
+    top: -5px;
+    left: -5px;
+    border-top-width: 2px;
+    border-left-width: 2px;
+    transform: translate(-8px, -8px);
+  }
+  .reg.tr {
+    top: -5px;
+    right: -5px;
+    border-top-width: 2px;
+    border-right-width: 2px;
+    transform: translate(8px, -8px);
+  }
+  .reg.bl {
+    bottom: -5px;
+    left: -5px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    transform: translate(-8px, 8px);
+  }
+  .reg.br {
+    bottom: -5px;
+    right: -5px;
+    border-bottom-width: 2px;
+    border-right-width: 2px;
+    transform: translate(8px, 8px);
+  }
+  /* Card registration: images rest as a blue print; hovering or focusing a card brings them to
+     full color and snaps registration marks onto the corners. Touch screens keep full color. */
+  @media (hover: hover) {
+    .card-media img {
+      filter: grayscale(1) contrast(1.1);
+      transition: filter 0.45s ease;
+    }
+    .tint {
+      opacity: 1;
+      transition: opacity 0.45s ease;
+    }
+    .reg {
+      transition:
+        transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1),
+        opacity 0.2s ease;
+    }
+    .card:hover img,
+    .card:focus-within img {
+      filter: none;
+    }
+    .card:hover .tint,
+    .card:focus-within .tint {
+      opacity: 0;
+    }
+    .card:hover .reg,
+    .card:focus-within .reg {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .card-media img,
+    .tint,
+    .reg {
+      transition: none;
+    }
   }
   .card-strip + .card-body {
     padding-top: 24px;

@@ -1,0 +1,144 @@
+---
+// Dimension line under a section heading: ticks at both ends and a count of what's below.
+// Headings that start below the fold type their eyebrow and draw the line when scrolled into view.
+interface Props {
+  value: string;
+}
+const { value } = Astro.props;
+---
+
+<div class="dim-line" aria-hidden="true">
+  <i class="tick l"></i><i class="bar"></i><i class="tick r"></i><span class="val">{value}</span>
+</div>
+
+<script>
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (!e.isIntersecting) continue;
+          e.target.classList.add('play');
+          io.unobserve(e.target);
+        }
+      },
+      { threshold: 0.6 },
+    );
+    document.querySelectorAll<HTMLElement>('.dim-line').forEach((line) => {
+      const head = line.parentElement;
+      // Only arm headings below the first screen, so nothing visible on load is ever hidden.
+      if (!head || head.getBoundingClientRect().top < window.innerHeight) return;
+      const type = head.querySelector<HTMLElement>('.eyebrow');
+      if (type) type.style.setProperty('--w', `${type.scrollWidth}px`);
+      head.classList.add('dim-armed');
+      io.observe(head);
+    });
+  }
+</script>
+
+<style>
+  .dim-line {
+    position: relative;
+    height: 14px;
+    margin-top: 14px;
+  }
+  .bar {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 1.5px;
+    background: rgba(var(--line), 0.6);
+    transform-origin: left center;
+  }
+  .tick {
+    position: absolute;
+    top: 0;
+    width: 1.5px;
+    height: 14px;
+    background: rgba(var(--line), 0.8);
+  }
+  .tick.l {
+    left: 0;
+  }
+  .tick.r {
+    right: 0;
+  }
+  .val {
+    position: absolute;
+    right: 12px;
+    top: -16px;
+    padding: 0 6px;
+    background: var(--ground);
+    font: 400 11px/1 var(--mono);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  /* armed: hold the first frame until the heading scrolls in */
+  :global(.dim-armed) :global(.eyebrow) {
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    vertical-align: bottom;
+    border-right: 2px solid transparent;
+    animation:
+      dim-type 0.55s steps(10, end) both paused,
+      dim-caret 0.5s step-end 3 0.55s paused;
+  }
+  :global(.dim-armed) .tick.l {
+    animation: dim-tick 0.18s ease-out 0.25s both paused;
+  }
+  :global(.dim-armed) .bar {
+    animation: dim-bar 0.7s cubic-bezier(0.3, 0.7, 0.2, 1) 0.35s both paused;
+  }
+  :global(.dim-armed) .tick.r {
+    animation: dim-tick 0.18s ease-out 1s both paused;
+  }
+  :global(.dim-armed) .val {
+    animation: dim-fade 0.3s ease 1.1s both paused;
+  }
+  :global(.dim-armed.play) :global(.eyebrow),
+  :global(.dim-armed.play) .tick,
+  :global(.dim-armed.play) .bar,
+  :global(.dim-armed.play) .val {
+    animation-play-state: running;
+  }
+  @keyframes dim-type {
+    from {
+      width: 0;
+    }
+    to {
+      width: var(--w);
+    }
+  }
+  @keyframes dim-caret {
+    50% {
+      border-right-color: var(--accent);
+    }
+  }
+  @keyframes dim-tick {
+    from {
+      transform: scaleY(0);
+    }
+    to {
+      transform: scaleY(1);
+    }
+  }
+  @keyframes dim-bar {
+    from {
+      transform: scaleX(0);
+    }
+    to {
+      transform: scaleX(1);
+    }
+  }
+  @keyframes dim-fade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+</style>

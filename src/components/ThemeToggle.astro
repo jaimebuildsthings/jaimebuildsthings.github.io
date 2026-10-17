@@ -29,16 +29,67 @@
   document.querySelectorAll<HTMLButtonElement>('.theme-toggle').forEach((b) =>
     b.addEventListener('click', () => {
       const next = current() === 'dark' ? 'light' : 'dark';
-      root.dataset.theme = next;
-      try {
-        localStorage.setItem('theme', next);
-      } catch {}
-      sync();
+      const apply = () => {
+        root.dataset.theme = next;
+        try {
+          localStorage.setItem('theme', next);
+        } catch {}
+        sync();
+      };
+      if (!document.startViewTransition || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        apply();
+        return;
+      }
+      printFeed(apply);
     }),
   );
+
+  // Print feed: the new theme feeds down the sheet from the top behind a glowing print head.
+  function printFeed(apply: () => void) {
+    const head = document.createElement('div');
+    head.className = 'print-head';
+    const t = document.startViewTransition(() => {
+      apply();
+      document.body.append(head);
+    });
+    const timing = { duration: 750, easing: 'cubic-bezier(.6,0,.3,1)' };
+    t.ready.then(() => {
+      root.animate(
+        { clipPath: ['inset(0 0 100% 0)', 'inset(0 0 0% 0)'] },
+        { ...timing, pseudoElement: '::view-transition-new(root)' },
+      );
+      root.animate(
+        { transform: ['translateY(0)', `translateY(${window.innerHeight}px)`] },
+        { ...timing, pseudoElement: '::view-transition-group(print-head)' },
+      );
+    });
+    t.finished.finally(() => head.remove());
+  }
   media.addEventListener('change', sync);
   sync();
 </script>
+
+<style is:global>
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
+  }
+  ::view-transition-new(print-head) {
+    animation: none;
+  }
+  .print-head {
+    view-transition-name: print-head;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: #ffa552;
+    box-shadow: 0 0 12px 2px rgba(255, 165, 82, 0.55);
+    pointer-events: none;
+  }
+</style>
 
 <style>
   .theme-toggle {
