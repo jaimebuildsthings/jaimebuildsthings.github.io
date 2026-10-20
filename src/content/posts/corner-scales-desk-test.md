@@ -3,7 +3,6 @@ title: 'Corner scales: the desk test'
 description: 'Four load cells, a SparkFun Combinator, a generic HX711 and an ESP32-S3, wired up on the desk until pressing each cell moved the number.'
 date: 2026-10-20
 tags: ['corner-scales', 'electronics', 'soldering']
-draft: true
 ---
 
 The parts for [corner-scales](https://github.com/jaimebuildsthings/corner-scales) arrived, so I started on the electronics before a trip to the hardware store for plywood. The goal for this step is small: press on a load cell and watch a number change on the serial console.
