@@ -44,3 +44,29 @@ export async function getPosts(): Promise<Post[]> {
     }))
     .reverse();
 }
+
+/** URL for a tag's page. */
+export function tagHref(tag: string): string {
+  return `/log/tags/${tag}/`;
+}
+
+/** Every tag with its post count, most used first. */
+export function allTags(posts: Post[]): { tag: string; count: number }[] {
+  const counts = new Map<string, number>();
+  for (const p of posts) for (const t of p.data.tags) counts.set(t, (counts.get(t) ?? 0) + 1);
+  return [...counts]
+    .map(([tag, count]) => ({ tag, count }))
+    .sort((a, b) => b.count - a.count || a.tag.localeCompare(b.tag));
+}
+
+/** Other posts sharing tags with `post`, most shared tags first, then newest. */
+export function relatedPosts(post: Post, posts: Post[], limit = 3): Post[] {
+  const tags = new Set(post.data.tags);
+  return posts
+    .filter((p) => p.id !== post.id)
+    .map((p) => ({ p, shared: p.data.tags.filter((t) => tags.has(t)).length }))
+    .filter(({ shared }) => shared > 0)
+    .sort((a, b) => b.shared - a.shared || b.p.data.date.valueOf() - a.p.data.date.valueOf())
+    .slice(0, limit)
+    .map(({ p }) => p);
+}

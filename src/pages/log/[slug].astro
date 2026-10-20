@@ -1,14 +1,15 @@
 ---
 import { render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
-import { getPosts, isoDate, type Post } from '../../lib/posts';
+import LogTable from '../../components/LogTable.astro';
+import { getPosts, isoDate, relatedPosts, tagHref, type Post } from '../../lib/posts';
 import { SITE } from '../../site.config';
 
 export async function getStaticPaths() {
   const posts = await getPosts(); // newest first
   return posts.map((post, i) => ({
     params: { slug: post.id },
-    props: { post, newer: posts[i - 1], older: posts[i + 1] },
+    props: { post, newer: posts[i - 1], older: posts[i + 1], related: relatedPosts(post, posts) },
   }));
 }
 
@@ -16,9 +17,10 @@ interface Props {
   post: Post;
   newer?: Post;
   older?: Post;
+  related: Post[];
 }
 
-const { post, newer, older } = Astro.props;
+const { post, newer, older, related } = Astro.props;
 const { Content, headings } = await render(post);
 const toc = headings.filter((h) => h.depth === 2);
 ---
@@ -50,7 +52,9 @@ const toc = headings.filter((h) => h.depth === 2);
         post.data.tags.length > 0 && (
           <ul class="tags" aria-label="Tags">
             {post.data.tags.map((t) => (
-              <li>{t}</li>
+              <li>
+                <a href={tagHref(t)}>{t}</a>
+              </li>
             ))}
           </ul>
         )
@@ -78,6 +82,15 @@ const toc = headings.filter((h) => h.depth === 2);
         <Content />
       </div>
     </div>
+
+    {
+      related.length > 0 && (
+        <section class="related" aria-labelledby="related-title">
+          <h2 id="related-title" class="label">Related</h2>
+          <LogTable posts={related} />
+        </section>
+      )
+    }
 
     <footer class="post-foot">
       <div class="sign label">Questions or corrections? <a href={`mailto:${SITE.email}`}>Email me</a>.</div>
@@ -179,9 +192,24 @@ const toc = headings.filter((h) => h.depth === 2);
     font-family: var(--mono);
     font-size: 12px;
   }
-  .tags li {
+  .tags a {
+    display: block;
     padding: 4px 8px;
     border: 1px solid rgba(var(--line), var(--l-mid));
+  }
+  .tags a:hover {
+    text-decoration: none;
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .related {
+    margin-top: 72px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .related h2 {
+    margin: 0;
   }
 
   .post-grid {

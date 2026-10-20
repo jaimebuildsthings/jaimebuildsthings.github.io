@@ -1,0 +1,59 @@
+---
+import { tagHref } from '../lib/posts';
+
+interface Props {
+  tags: { tag: string; count: number }[];
+  /** The tag whose page this is, shown as selected. */
+  current?: string;
+}
+const { tags, current } = Astro.props;
+---
+
+{
+  tags.length > 0 && (
+    <ul class="tag-list" aria-label="Tags">
+      {tags.map(({ tag, count }) => (
+        <li>
+          <a href={tagHref(tag)} aria-current={tag === current ? 'page' : undefined}>
+            {tag} <span class="count">{count}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+<style>
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-family: var(--mono);
+    font-size: 12px;
+  }
+  a {
+    display: block;
+    padding: 4px 8px;
+    border: 1px solid rgba(var(--line), var(--l-mid));
+  }
+  a:hover {
+    text-decoration: none;
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  a[aria-current='page'] {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: var(--on-accent);
+  }
+  .count {
+    color: var(--muted);
+  }
+  a[aria-current='page'] .count {
+    color: inherit;
+    opacity: 0.75;
+  }
+</style>
