@@ -76,6 +76,26 @@ const stackDy = (cy: number, i: number) => 360 + (i - 2) * 14 - cy;
   <figcaption class="label">Fig. 1 — Exploded view, typical build</figcaption>
 </figure>
 
+<!-- Inline so it runs before first paint: if less than half the figure is on screen (phones),
+     hold the drafting animation on its first frame until half of it scrolls into view. -->
+<script is:inline>
+  (function () {
+    var fig = document.currentScript.previousElementSibling;
+    var r = fig.getBoundingClientRect();
+    if (!('IntersectionObserver' in window) || window.innerHeight - r.top >= r.height / 2) return;
+    fig.classList.add('armed');
+    var io = new IntersectionObserver(
+      function (entries) {
+        if (!entries[0].isIntersecting) return;
+        fig.classList.add('play');
+        io.disconnect();
+      },
+      { threshold: 0.5 },
+    );
+    io.observe(fig);
+  })();
+</script>
+
 <style>
   .exploded {
     margin: 0;
@@ -198,6 +218,18 @@ const stackDy = (cy: number, i: number) => 360 + (i - 2) * 14 - cy;
       animation: fade 0.5s ease both;
       animation-delay: 2350ms;
     }
+  }
+  .armed:not(.play) .plate,
+  .armed:not(.play) .plate polygon,
+  .armed:not(.play) .glyph,
+  .armed:not(.play) .axis,
+  .armed:not(.play) .assembly,
+  .armed:not(.play) .leader,
+  .armed:not(.play) .node,
+  .armed:not(.play) .callout,
+  .armed:not(.play) .loop,
+  .armed:not(.play) .loop-head {
+    animation-play-state: paused;
   }
   @keyframes draw {
     from {
