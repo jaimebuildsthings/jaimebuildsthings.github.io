@@ -1,5 +1,6 @@
 ---
-// Dimension line under a section heading: ticks at both ends and a count of what's below.
+// Dimension line under a section heading, as wide as the heading: ticks at both ends and a count of what's below.
+// Usage: <Dim value="3 items"><h2>…</h2></Dim>
 // Headings that start below the fold type their eyebrow and draw the line when scrolled into view.
 interface Props {
   value: string;
@@ -7,8 +8,11 @@ interface Props {
 const { value } = Astro.props;
 ---
 
-<div class="dim-line" aria-hidden="true">
-  <i class="tick l"></i><i class="bar"></i><i class="tick r"></i><span class="val">{value}</span>
+<div class="dimmed">
+  <slot />
+  <div class="dim-line" aria-hidden="true">
+    <i class="tick l"></i><i class="bar"></i><i class="tick r"></i><span class="val">{value}</span>
+  </div>
 </div>
 
 <script>
@@ -24,7 +28,8 @@ const { value } = Astro.props;
       { threshold: 0.6 },
     );
     document.querySelectorAll<HTMLElement>('.dim-line').forEach((line) => {
-      const head = line.parentElement;
+      // the section head holding the eyebrow and the heading
+      const head = line.parentElement?.parentElement;
       // Only arm headings below the first screen, so nothing visible on load is ever hidden.
       if (!head || head.getBoundingClientRect().top < window.innerHeight) return;
       head.classList.add('dim-armed');
@@ -34,6 +39,10 @@ const { value } = Astro.props;
 </script>
 
 <style>
+  .dimmed {
+    width: fit-content;
+    max-width: 100%;
+  }
   .dim-line {
     position: relative;
     height: 14px;

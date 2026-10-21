@@ -43,8 +43,9 @@ const spec = [
     <div class="section-head">
       <div>
         <div class="eyebrow">Section 01</div>
-        <h2 id="work-title" class="section-title">Projects</h2>
-        <Dim value={`${projects.length} items`} />
+        <Dim value={`${projects.length} items`}>
+          <h2 id="work-title" class="section-title">Projects</h2>
+        </Dim>
       </div>
       <a href={SITE.github} class="text-link">All repos on GitHub ↗</a>
     </div>
@@ -98,8 +99,9 @@ const spec = [
   <section id="spec" class="section spec" aria-labelledby="spec-title">
     <div class="spec-copy">
       <div class="eyebrow">Section 02</div>
-      <h2 id="spec-title" class="section-title">Spec sheet</h2>
-      <Dim value={`${spec.length} rows`} />
+      <Dim value={`${spec.length} rows`}>
+        <h2 id="spec-title" class="section-title">Spec sheet</h2>
+      </Dim>
       <p>I’m a senior engineer at Bestow in Dallas. I work across the stack, mostly on the frontend, in TypeScript and React. Outside of work I race autocross, ride mountain bikes and fix things around the house. My side projects are tools for working on my own car.</p>
     </div>
     <table class="bom">
@@ -122,8 +124,9 @@ const spec = [
     <div class="section-head">
       <div>
         <div class="eyebrow">Section 03</div>
-        <h2 id="log-title" class="section-title">Revision log</h2>
-        <Dim value={`${posts.length} ${posts.length === 1 ? 'entry' : 'entries'}`} />
+        <Dim value={`${posts.length} ${posts.length === 1 ? 'entry' : 'entries'}`}>
+          <h2 id="log-title" class="section-title">Revision log</h2>
+        </Dim>
       </div>
       <a href="/log/" class="text-link">Full log →</a>
     </div>
