@@ -446,7 +446,9 @@ const spec = [
     .cards {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
-    /* an odd card out spans the row, with media and text side by side */
+  }
+  /* two-column widths only: an odd card out spans the row, with media and text side by side */
+  @media (min-width: 761px) and (max-width: 1100px) {
     .card:last-child:nth-child(odd) {
       grid-column: 1 / -1;
       display: grid;
