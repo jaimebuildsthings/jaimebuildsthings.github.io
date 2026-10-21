@@ -25,7 +25,13 @@ const { Content, headings } = await render(post);
 const toc = headings.filter((h) => h.depth === 2);
 ---
 
-<Base title={post.data.title} description={post.data.description} sheet={`LOG-${post.num}`} type="article">
+<Base
+  title={post.data.title}
+  description={post.data.description}
+  sheet={`LOG-${post.num}`}
+  type="article"
+  image={`/og/log/${post.id}.png`}
+>
   <article class="post">
     <header class="post-head">
       <a href="/log/" class="back label">← Revision log</a>
