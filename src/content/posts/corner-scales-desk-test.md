@@ -5,16 +5,16 @@ date: 2026-10-20
 tags: ['corner-scales', 'electronics', 'soldering']
 ---
 
-The parts for [corner-scales](https://github.com/jaimebuildsthings/corner-scales) arrived, so I started on the electronics before a trip to the hardware store for plywood. The goal for this step is small: press on a load cell and watch a number change on the serial console.
+The parts for [corner-scales](https://github.com/jaimebuildsthings/corner-scales) arrived, so I started on the electronics before a trip to the hardware store for plywood. The goal for this step is to press a load cell and see the reading change on the serial console.
 
 ## The plan
 
-Everything sits on the desk, joined with short wires: no jacks, no cable, no enclosure.
+For this test everything sits on the desk, connected with short wires. No enclosure yet.
 
 ![Desk test wiring: four cells, Combinator, HX711, ESP32-S3](/images/log/corner-scales-desk-test/wiring-desk.svg)
 
-- **Four 50 kg load cells.** Each is half of a strain-gauge bridge, with three wires.
-- **SparkFun Load Sensor Combinator.** Joins the four half-bridges into one full bridge on a PCB, so I don't have to.
+- **Four 50 kg load cells.** Each has two strain gauges and three wires.
+- **SparkFun Load Sensor Combinator.** Wires the four cells together into one bridge the HX711 can read.
 - **HX711.** Amplifies the bridge's few millivolts and turns them into a 24-bit number, about 10 times a second.
 - **ESP32-S3.** Reads that number and turns it into kilograms.
 
@@ -24,17 +24,17 @@ Instead of the SparkFun board, I’ll be using the HX711 included in the load ce
 
 ![Generic HX711 board, bare](/images/log/corner-scales-desk-test/hx711-bare.webp)
 
-Two differences matter: its pins are named after the bridge (E+, A+…) instead of wire colors, and it has a single power pin. That pin sets the logic level too, so it goes to the ESP32's **3.3 V**, not 5 V. Channel B isn't used.
+Its pins are labeled E+, E−, A+, A− instead of by wire color, and it has one power pin, VCC. VCC also sets the logic level, so it goes to the ESP32's **3.3 V**, not 5 V. Channel B isn't used.
 
 I soldered screw terminals on both rows so I can rewire without the iron. My first pass was lumpy, and two joints on the top row looked like they might be touching:
 
 ![First pass: lumpy joints on the top row](/images/log/corner-scales-desk-test/hx711-first-pass.webp)
 
-Reflowed with a bit of flux, every joint came out separate and even:
+I reflowed them with a bit of flux:
 
 ![Reworked joints](/images/log/corner-scales-desk-test/hx711-reworked.webp)
 
-A photo can't show a hairline bridge, so the multimeter's continuity mode gets the last word: no beep between neighboring pins.
+I checked neighboring pins with the multimeter's continuity mode. No beeps, so no shorts.
 
 ## Finding the center wire
 
@@ -49,7 +49,7 @@ The Combinator has three pads per corner (UL, UR, LL, LR), labeled **C**, **+** 
 | red–black | ~2 kΩ |
 | red–yellow | ~1 kΩ |
 
-The pair reading double is the two ends, so **yellow is the center**: yellow → C, red → +, black → −, the same on all four cells.
+Red–black reads twice as much, so those are the two ends and **yellow is the center**. On all four cells: yellow → C, red → +, black → −.
 
 ![Combinator, front: all four corners soldered](/images/log/corner-scales-desk-test/combinator-front.webp)
 
@@ -75,7 +75,7 @@ The other ends go into the HX711's top row of screw terminals: red → E+, black
 
 Before adding power, I measured the bridge at the HX711's terminals.
 
-My multimeter is a Fluke 12B that Mr Ruiz, my instructor at Army AIT, gave me about 15 years ago. It's still the one I reach for.
+My multimeter is a Fluke 12B that Mr Ruiz, my instructor at Army AIT, gifted me about 15 years ago. Thanks, Mr Ruiz.
 
 My first E+ to E− reading was 0.5 Ω, which looked like a short. Measured again right at the HX711's pins, it read 1.914 kΩ. A+ to A− read 2.006 kΩ. Both are close to the ~2 kΩ I expected, so the bridge checks out.
 
@@ -89,7 +89,7 @@ The ESP32-S3 (N16R8) sits across the breadboard. I cut four solid jumpers: 3V3, 
 
 ![ESP32-S3 on the breadboard with four jumpers](/images/log/corner-scales-desk-test/esp32-breadboard.webp)
 
-The HX711's bottom row connects to those jumpers: VCC → 3V3, GND → GND, DT → GPIO4, SCK → GPIO5. That's the whole desk rig.
+The HX711's bottom row connects to those jumpers: VCC → 3V3, GND → GND, DT → GPIO4, SCK → GPIO5.
 
 ![The complete desk rig](/images/log/corner-scales-desk-test/desk-rig-complete.webp)
 
@@ -99,11 +99,11 @@ The HX711's bottom row connects to those jumpers: VCC → 3V3, GND → GND, DT �
 
 The board has two USB-C ports with no labels. One is the ESP32-S3's native USB, which was still running the seller's demo firmware. The other goes through a WCH CH343 USB-to-serial chip, and that's the one the console needs.
 
-After flashing, `status` reported −612,107 counts, stable, with 0 dropped samples. The number is raw and uncalibrated, so the sign and size don't mean anything yet. What matters is that it's steady and that it moves when I press a cell.
+After flashing, `status` reported −612,107 counts, stable, with 0 dropped samples. The number is raw and uncalibrated, so the sign and size don't mean anything yet. For now I only need it to stay steady and change when I press a cell.
 
 ## First press
 
-My first 20-second recording looked like noise. The cells were loose on the mat and I was moving wires around. In a second run I kept my hands off the wires: at rest the reading sat near −614,500 and moved by only tens of counts. Pressing UL dropped it by 100,000 to 200,000 counts. The raw data is in [first-press.csv](/images/log/corner-scales-desk-test/data/first-press.csv).
+My first 20-second recording looked like noise. The cells were loose on the mat and I was moving wires around. In a second run I kept my hands off the wires. At rest the reading stayed near −614,500, moving only tens of counts. Pressing UL dropped it by 100,000 to 200,000 counts. The raw data is in [first-press.csv](/images/log/corner-scales-desk-test/data/first-press.csv).
 
 ## Press test
 
@@ -130,7 +130,7 @@ Hands off, then hit Enter...
   hands off: -614177 to -613997  (range 180)
 ```
 
-Every cell pushes the count more negative, so none of them is wired backwards. The press ranges are different because I pressed each cell by hand with a different force. The point is only that each one moves. Hands off, the range is about 200 counts before and after, and the reading comes back to the same baseline.
+Every cell pushes the count more negative, so none of them is wired backwards. The ranges differ because I pressed each cell by hand with different force. Hands off, the range is about 200 counts before and after, and the reading returns to the same baseline.
 
 ## Next
 
