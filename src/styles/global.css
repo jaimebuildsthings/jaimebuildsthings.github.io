@@ -267,6 +267,11 @@ svg {
     font-size: 10px;
     letter-spacing: 0.08em;
   }
+  /* let the label wrap rather than push past the column on narrow phones */
+  .dim span {
+    white-space: normal;
+    text-align: center;
+  }
 }
 .dim::before,
 .dim::after {
