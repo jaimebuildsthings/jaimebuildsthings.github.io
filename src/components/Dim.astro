@@ -27,8 +27,6 @@ const { value } = Astro.props;
       const head = line.parentElement;
       // Only arm headings below the first screen, so nothing visible on load is ever hidden.
       if (!head || head.getBoundingClientRect().top < window.innerHeight) return;
-      const type = head.querySelector<HTMLElement>('.eyebrow');
-      if (type) type.style.setProperty('--w', `${type.scrollWidth}px`);
       head.classList.add('dim-armed');
       io.observe(head);
     });
@@ -78,9 +76,7 @@ const { value } = Astro.props;
   /* armed: hold the first frame until the heading scrolls in */
   :global(.dim-armed) :global(.eyebrow) {
     display: inline-block;
-    overflow: hidden;
-    white-space: nowrap;
-    vertical-align: bottom;
+    max-width: 100%;
     border-right: 2px solid transparent;
     animation:
       dim-type 0.55s steps(10, end) both paused,
@@ -104,12 +100,13 @@ const { value } = Astro.props;
   :global(.dim-armed.play) .val {
     animation-play-state: running;
   }
+  /* clip instead of width, so nothing depends on a measurement taken before fonts load */
   @keyframes dim-type {
     from {
-      width: 0;
+      clip-path: inset(0 100% 0 0);
     }
     to {
-      width: var(--w);
+      clip-path: inset(0 0 0 0);
     }
   }
   @keyframes dim-caret {
