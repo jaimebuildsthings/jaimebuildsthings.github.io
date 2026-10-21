@@ -27,7 +27,7 @@ export const projects: Project[] = [
     name: 'corner-scales',
     status: 'Prototype',
     summary:
-      'DIY wireless corner-weight scales. The four pads share readings over ESP-NOW, so you connect to one and see all four corners. No Wi-Fi network needed.',
+      'DIY wireless corner-weight scales. Four pads with load cells and an ESP32-S3 each, talking over ESP-NOW.',
     tags: ['Rust', 'Embassy', 'ESP32-S3', 'ESP-NOW', 'OpenSCAD'],
     source: 'https://github.com/jaimebuildsthings/corner-scales',
     image: '/images/corner-scales.webp',
