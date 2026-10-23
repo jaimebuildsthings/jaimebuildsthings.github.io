@@ -18,7 +18,7 @@ The enclosure is a two-half pistol grip in OpenSCAD. Version 0.3 was designed en
 
 I started with the switch, since the trigger is designed around it.
 
-It's not the part the model was built for. The model assumed a small switch, 19.8 × 10.2 × 6.4 mm. What arrived is a standard-size one: 28.00 × 15.95 × 9.85 mm, about 3.4 times the volume.
+The model assumed a small switch, 19.8 × 10.2 × 6.4 mm. The one I have is a standard-size switch, 28.00 × 15.95 × 9.85 mm, about 3.4 times the volume.
 
 Its wheel sits on a long lever that reaches 8.25 mm past the body and stands 9.65 mm off it. The model assumed 5. My first reading caught the lever instead of the wheel.
 
@@ -35,12 +35,12 @@ The laser was the other big difference. The model assumed Ø6 × 14 mm; the real
 
 ## Everything else
 
-- **Menu button.** I added it to the design after ordering the parts, so I used one from my parts box. It's 0.8 mm shorter than modeled.
-- **FeatherS3[D].** The board is 1.1 mm thick, not the standard 1.6.
-- **Screen.** The board is 5 mm longer than modeled.
-- **Battery.** I misread the width as 29.65 mm at first. It's 34.65, a little wider than modeled.
-- **Thermal camera.** The lens sits 11.4 mm above the board, not 5. I misread the legs as 10 mm at first; they're 6, so the camera has to sit flush on its perfboard to leave enough to solder.
-- **Clock and buzzer.** Both match.
+- I added the menu button after ordering the parts, so I used one from my parts box. It's 0.8 mm shorter than modeled.
+- The Feather's board is 1.1 mm thick, not the standard 1.6.
+- The screen's board is 5 mm longer than modeled.
+- I misread the battery's width as 29.65 mm at first. It's 34.65, a little wider than modeled.
+- The thermal camera's lens sits 11.4 mm above the board, not 5. I misread its legs as 10 mm at first; they're 6, so the camera has to sit flush on its perfboard to leave enough to solder.
+- The clock and buzzer match.
 
 | Part | Assumed (v0.3) | Measured |
 | --- | --- | --- |
@@ -91,13 +91,13 @@ I only need COM and NO, so I'll cut NC off and trim NO to 7 mm.
 
 I didn't want to waste more than one or two prints, so I had Claude review the design and try to break it. It found:
 
-- **Too little margin to the click.** With print tolerances, the switch might never click. A full pull now goes 0.9 mm past the click and stops 0.5 mm before it bottoms out.
-- **A printed pin would snap.** It's an M3 × 14 screw now.
-- **Walls 0.17 mm thick** around a nut. The posts got bigger.
-- **The trigger's stop ear would likely snap.** It's twice the size, and the trigger gets printed solid.
-- **The laser hole was too tight.** 10.4 mm for a 10.1 mm laser, and printed holes come out small. Now 10.7.
-- **The clock-to-screen cable was too short.** It needs 200 mm, not 100.
-- **Nothing held the screen in place.**
+- With print tolerances, the switch might never click. A full pull now goes 0.9 mm past the click and stops 0.5 mm before it bottoms out.
+- A printed pin holding the switch would snap. It's an M3 × 14 screw now.
+- The walls around one nut were 0.17 mm thick, so the posts got bigger.
+- The trigger's stop ear would likely snap. It's twice the size now, and the trigger gets printed solid.
+- The laser hole was 10.4 mm for a 10.1 mm laser, and printed holes come out small. It's 10.7 now.
+- The clock-to-screen cable was too short. It needs 200 mm, not 100.
+- Nothing held the screen in place.
 
 To test the trigger without printing both halves, there's a small test print: the top of the grip with the hinge, the switch posts and the trigger's stop. Under an hour with the trigger. If the switch doesn't click, I sand the stop post; if it bottoms out, I add tape.
 
@@ -105,21 +105,21 @@ To test the trigger without printing both halves, there's a small test print: th
 
 Before printing the halves:
 
-- **The Feather's antenna end is low.** Everything there is under 2 mm, so the switch clears it. So I can't plug an external antenna into its u.FL socket.
-- **The wheel is centered** on the switch, so either side can face the middle.
-- **The clock's cables bend right at the plug**, so they fit beside it.
+- Everything at the Feather's antenna end is under 2 mm, so the switch clears it. I can't use an external antenna on its u.FL socket, though.
+- The wheel is centered on the switch, so either side can face the middle.
+- The clock's cables bend right at the plug, so they fit beside it.
 
 For the screen, I wanted something that holds it without glue so I can take it out again. It now slides into four small slots at its corners and comes out when you open the case.
 
 ## Where v0.4 ended up
 
-- **Trigger:** 14 mm wide. Inside the grip it's 3 mm wider on the switch's side, so the switch's whole wheel presses on it; the trigger surface stays centered.
-- **Switch:** upside down beside the Feather, held by two M3 screws, one with a nut and one as a pin. Wired COM and NO.
-- **Clock:** across the grip, low on the right wall.
-- **Thermal camera:** flush on a 20 mm square of perfboard.
-- **Laser:** along the top of the head.
-- **Screen and menu button:** lower on the back. The screen sits in corner slots, no glue.
-- **Margins:** the trigger is 2 mm from everything, and the switch is 1 mm from the Feather.
+- Trigger: 14 mm wide and centered, 3 mm wider inside the grip under the switch's wheel.
+- Switch: upside down beside the Feather, held by two M3 screws, one with a nut and one as a pin. Wired COM and NO.
+- Clock: across the grip, low on the right wall.
+- Thermal camera: flush on a 20 mm square of perfboard.
+- Laser: along the top of the head.
+- Screen and menu button: lower on the back. The screen sits in corner slots, no glue.
+- Margins: the trigger is 2 mm from everything, and the switch is 1 mm from the Feather.
 
 <figure>
   <img src="/images/log/pit-pyro-measuring/v04-cutaway.webp" alt="The v0.4 enclosure from inside, with every part in place" />
