@@ -474,6 +474,20 @@ svg {
   height: auto;
   border: 1px solid rgba(var(--line), var(--l-strong));
 }
+.prose figure {
+  /* reset the browser's side and bottom margins; the top comes from .prose > * + * */
+  margin-inline: 0;
+  margin-bottom: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.prose figcaption {
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--muted);
+}
 .prose table {
   width: 100%;
   border-collapse: collapse;
@@ -493,6 +507,19 @@ svg {
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--muted);
+}
+/* narrow screens: tighter cells, and a table that still doesn't fit scrolls on its own */
+@media (max-width: 600px) {
+  .prose table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    font-size: 14px;
+  }
+  .prose th,
+  .prose td {
+    padding: 8px 10px;
+  }
 }
 
 /* inline code */
