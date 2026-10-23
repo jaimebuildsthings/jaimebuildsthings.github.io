@@ -119,6 +119,7 @@ For the screen, I wanted something that holds it without glue so I can take it o
 - Thermal camera: flush on a 20 mm square of perfboard.
 - Laser: along the top of the head.
 - Screen and menu button: lower on the back. The screen sits in corner slots, no glue.
+- USB-C: no cover. The port stays open in the bottom of the grip.
 - Margins: the trigger is 2 mm from everything, and the switch is 1 mm from the Feather.
 
 <figure>
@@ -130,6 +131,6 @@ For the screen, I wanted something that holds it without glue so I can take it o
 
 - Print the test piece ([test-trigger.stl](https://github.com/jaimebuildsthings/pit-pyro/blob/main/hardware/enclosure/stl/test-trigger.stl)) and the trigger ([trigger.stl](https://github.com/jaimebuildsthings/pit-pyro/blob/main/hardware/enclosure/stl/trigger.stl)). Check that the switch clicks before the stop post and that the trigger springs back without rattling, then tune the model.
 - Order the 200 mm cable.
-- Print the two halves, the button cap and the USB cover at the library, and put it together.
+- Print the two halves and the button cap at the library, and put it together.
 
 The test print gets its own post. The changes are in [PR #2](https://github.com/jaimebuildsthings/pit-pyro/pull/2), and the model is [enclosure.scad](https://github.com/jaimebuildsthings/pit-pyro/blob/main/hardware/enclosure/enclosure.scad).
