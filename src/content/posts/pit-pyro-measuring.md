@@ -99,7 +99,7 @@ I didn't want to waste more than one or two prints, so I had Claude review the d
 - The clock-to-screen cable was too short. It needs 200 mm, not 100.
 - Nothing held the screen in place.
 
-To test the trigger without printing both halves, there's a small test print: the top of the grip with the hinge, the switch posts and the trigger's stop. Under an hour with the trigger. If the switch doesn't click, I sand the stop post; if it bottoms out, I add tape.
+To test the trigger without printing both halves, there's a small test print, [test-trigger.stl](https://github.com/jaimebuildsthings/pit-pyro/blob/main/hardware/enclosure/stl/test-trigger.stl): the top of the grip with the hinge, the switch posts and the trigger's stop. Under an hour with the trigger. If the switch doesn't click, I sand the stop post; if it bottoms out, I add tape.
 
 ## The last checks
 
@@ -128,7 +128,7 @@ For the screen, I wanted something that holds it without glue so I can take it o
 
 ## Next
 
-- Print the test piece and the trigger. Check that the switch clicks before the stop post and that the trigger springs back without rattling, then tune the model.
+- Print the test piece ([test-trigger.stl](https://github.com/jaimebuildsthings/pit-pyro/blob/main/hardware/enclosure/stl/test-trigger.stl)) and the trigger ([trigger.stl](https://github.com/jaimebuildsthings/pit-pyro/blob/main/hardware/enclosure/stl/trigger.stl)). Check that the switch clicks before the stop post and that the trigger springs back without rattling, then tune the model.
 - Order the 200 mm cable.
 - Print the two halves, the button cap and the USB cover at the library, and put it together.
 
