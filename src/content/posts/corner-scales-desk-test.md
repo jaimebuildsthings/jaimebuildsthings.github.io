@@ -1,5 +1,5 @@
 ---
-title: 'Corner scales: the desk test'
+title: 'Corner-scales: the desk test'
 description: 'Four load cells, a SparkFun Combinator, a generic HX711 and an ESP32-S3, wired up on the desk until pressing each cell moved the number.'
 date: 2026-10-20
 tags: ['corner-scales', 'electronics', 'soldering']
