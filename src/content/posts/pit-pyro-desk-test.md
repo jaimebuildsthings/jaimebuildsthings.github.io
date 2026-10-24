@@ -15,7 +15,7 @@ The Feather has no headers. In the grip it sits flat against the battery with wi
 
 <figure>
   <img src="/images/log/pit-pyro-desk-test/wiring-desk.webp" alt="Wiring diagram: the sensor on STEMMA 2, the clock and screen on STEMMA 1, and the trigger, menu button, buzzer and laser on the Feather's pins" />
-  <figcaption>The wiring plan for the whole desk test. The sensor's part changed on the day: no capacitors, and the cable's wires go straight onto the legs.</figcaption>
+  <figcaption>The wiring plan for the whole desk test. On the day, the cable's wires went straight onto the legs, and I forgot the two capacitors.</figcaption>
 </figure>
 
 ## The first sensor
@@ -79,6 +79,7 @@ To see what the sensor sees, there's now a viewer page that runs in Chrome. It r
 
 ## Next
 
+- Add the 100 nF and 10 µF capacitors across the sensor's power pins, then check whether the stripes change.
 - Try a spare sensor on a glued plate with no perfboard, and compare the stripes.
 - Let the sensor sit untouched for a few minutes, holding it by the perfboard instead of its metal body, and see if the stripes change.
 - Wire up the rest: trigger, menu button, buzzer, laser, clock and screen.
