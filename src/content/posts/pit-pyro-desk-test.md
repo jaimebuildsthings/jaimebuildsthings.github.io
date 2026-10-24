@@ -15,7 +15,7 @@ The Feather has no headers. In the grip it sits flat against the battery with wi
 
 <figure>
   <img src="/images/log/pit-pyro-desk-test/wiring-desk.webp" alt="Wiring diagram: the sensor on STEMMA 2, the clock and screen on STEMMA 1, and the trigger, menu button, buzzer and laser on the Feather's pins" />
-  <figcaption>The wiring plan for the whole desk test. On the day, the cable's wires went straight onto the legs, and I forgot the two capacitors.</figcaption>
+  <figcaption>The wiring plan for the whole desk test. On the day, the cable's wires went straight onto the legs, and I skipped the two capacitors, because fitting them on the legs with everything else seemed impossible.</figcaption>
 </figure>
 
 ## The first sensor
